@@ -1,4 +1,4 @@
-@extends('layout.header')
+@extends('layout.outline')
 
 @section('title', $task->title)
 {{-- no need @endsection as this line doesnt have html --}}
@@ -18,4 +18,3 @@
         </div>
 @endsection
 
-@extends('layout.footer')
