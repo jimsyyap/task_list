@@ -15,6 +15,7 @@ Route::get('/tasks', function () {
 
 Route::view('/tasks/create', 'create')
     ->name('tasks.create');
+/* this moved above because laravel sort issue */
 
 Route::get('/tasks/{id}', function ($id) {
     return view('show', [
@@ -25,8 +26,5 @@ Route::get('/tasks/{id}', function ($id) {
 Route::post('/tasks', function (Request $request) {
     dd($request->all());
 })->name('tasks.store');
-
-
-
 
 
