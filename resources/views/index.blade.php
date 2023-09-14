@@ -1,5 +1,5 @@
 @extends('layout.outline')
-@section('title', $task->title)
+{{-- @section('title', $task->title)--}}
 
 @section('content')
     <div class="container">
