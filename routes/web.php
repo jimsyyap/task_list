@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return redirect()->route('tasks.index');
 });
+
 Route::get('/tasks', function () {
     return view('index', [
         'tasks' => \App\Models\Task::latest()->get()
@@ -15,7 +16,6 @@ Route::get('/tasks', function () {
 
 Route::view('/tasks/create', 'create')
     ->name('tasks.create');
-/* this moved above because laravel sort issue */
 
 Route::get('/tasks/{id}', function ($id) {
     return view('show', [
@@ -27,4 +27,18 @@ Route::post('/tasks', function (Request $request) {
     dd($request->all());
 })->name('tasks.store');
 
+// Route::get('/xxx', function () {
+//     return 'Hello';
+// })->name('hello');
 
+// Route::get('/hallo', function () {
+//     return redirect()->route('hello');
+// });
+
+// Route::get('/greet/{name}', function ($name) {
+//     return 'Hello ' . $name . '!';
+// });
+
+Route::fallback(function () {
+    return 'Still got somewhere!';
+});
