@@ -33,8 +33,8 @@ Route::post('/tasks', function (Request $request) {
     ]);
     $task = new Task;
     $task -> title=$data['title'];
-    $task->description['description'];
-    $task->long_description['long_description'];
+    $task->description=$data['description'];
+    $task->long_description=$data['long_description'];
     $task->save();
 })->name('tasks.store');
 
