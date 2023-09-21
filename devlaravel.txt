@@ -1,0 +1,229 @@
+TODO
+
+#
+using nvm > node command not found
+    > go to home > nvm use latest > joy?
+    > go to proj dir > joy?
+#
+ubuntu 22.04 install nodejs
+(using nvm) https://github.com/nvm-sh/nvm#installing-and-updating *this works)
+https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-ubuntu-22-04
+    or (better?)
+https://github.com/nodesource/distributions#debian-and-ubuntu-based-distributions
+
+# psql passwd not set on env 
+$ php artisan migrate
+
+   Illuminate\Database\QueryException 
+
+  SQLSTATE[08006] [7] connection to server at "127.0.0.1", port 5432 failed: FATAL:  password authentication failed for user "root"
+connection to server at "127.0.0.1", port 5432 failed: FATAL:  password authentication failed for user "root" (Connection: pgsql, SQL: select * from information_schema.tables where table_catalog = tasklist and table_schema = public and table_name = migrations and table_type = 'BASE TABLE')
+
+solution
+    sudo -iu postgres
+    $ psql
+    $ \password
+    enter password twice
+    (* default user is postgres. You can set dev passwd as postgres)
+    $ exit
+    $ exit
+    $ php artisan migrate > joy!
+
+# code for comments in laravel
+    {{-- this comment will not render to html, cannot be viewed in browser source code --}}
+    <!-- else use this -->
+    source https://laravel-news.com/laravel-blade-comments
+
+# sept12, 2023
+PHP Warning: PHP Startup: Unable to load dynamic library 'pdo_pgsql' (tried: /usr/lib/php/20210902/pdo_pgsql (/usr/lib/php/20210902/pdo_pgsql: cannot open shared object file: No such file or directory), /usr/lib/php/20210902/pdo_pgsql.so (/usr/lib/php/20210902/pdo_pgsql.so: undefined symbol: pdo_parse_params)) in Unknown on line 0. 
+    Solution: comment out 
+        ;extension=pdo_pgsql
+        ;extension=pgsql
+
+    php artisan db:seed
+    Seeding: Database\Seeders\TodosSeeder
+
+       Error 
+
+      Class "Database\Seeders\Todo" not found
+
+      at database/seeders/TodosSeeder.php:18
+         14▕      * @return void
+         15▕      */
+         16▕     public function run()
+         17▕     {
+      ➜  18▕         Todo::factory()->count(10)->create();
+         19▕     }
+         20▕ }
+         21▕ 
+
+          +8 vendor frames 
+      9   database/seeders/DatabaseSeeder.php:18
+          Illuminate\Database\Seeder::call()
+
+          +23 vendor frames 
+      33  artisan:37
+          Illuminate\Foundation\Console\Kernel::handle()
+* try https://t.ly/08o4
+
+HOWTO
+    . Yay postgresql
+        . sudo -u postgres –i  initdb -D '/var/lib/postgres/data'
+        . Sudo systemctl start postgresql
+    . Postgres create db
+        . Create database name https://t.ly/83yd0
+    . Create laravel proj using react postgres
+        > laravel new projname
+        > composer require laravel/ui
+        > php artisan ui bootstrap --auth
+        > php artisan ui react(or vue)
+        > config.database.php default = pgsql
+        > .env pgsql 5432 db name user password
+        > npm install && npm run dev
+        > php artisan migrate
+        > components is example, #example you use, not #app
+    hello world vue
+        @extends('layouts.app')
+
+        @section('content')
+            <example-component></example-component>
+        @endsection
+
+POSTGRESQL
+    . Open pgsql $psql
+    . List db $\l
+    . Use db $psql -d dbname
+        . Or $\c dbname
+    . List tables $\dt
+    . Describe tables $\d table_name
+    . To see what's inside of table: $> SELECT * FROM table_name;
+
+    * Postgres control psql display rows with (END)
+        \pset pager off [source https://t.ly/N6MqP]
+        . Create file ~/.psqlrc > \pset pager off > save > joy?
+    . To drop database > $psql > DROP DATABASE <dbname>;
+* pgadmin4 not showing your databases? 
+    https://stackoverflow.com/questions/61576670/databases-in-psql-dont-show-up-in-pgadmin4
+
+    LARAVEL
+. $ laravel new project_name               [13:27:35]
+        Crafting application...
+        In RequestException.php line 113:
+          Server error: `GET http://cabinet.laravel.com/latest.  
+          zip` resulted in a `500 Internal Server Error` response               
+    *solution - use composer 
+        composer create-project laravel/laravel example-app
+        php artisan make:auth error
+            cd into working dir
+            composer require laravel/ui
+            php artisan ui vue|bootstrap|react --auth
+            npm install && npm run dev
+            php artisan migrate
+
+        Pass data from routes/
+            Route::get('/', function(){
+                $jimvar = '<p>from jimvar</p>';
+                return view('home', compact('jimvar'));
+                    // on view {{ $jimvar }}
+                //return view("home", ["someData"=>$jimvar]);
+                //return View::make('home')->with('someData', $jimvar);
+                //return view('home', ['someData' => 'James']);
+            });
+
+    ERRORS
+    laravel 8 target class controller does not exist
+        https://t.ly/weOQ
+            example.. Route::get('todos', [TodosController::class, 'index']);
+    postgres error fatal role does not exist
+        . Sudo -iu postgres
+        . Createuser --interactive 
+        > jim > y > joy?
+    Undefined variable: questionnaires (View: /home/jim/builtosell/coderstape/resources/views/home.blade.php) 
+        . User auth?
+            [solved] it had to do with your routes. Test using dd(), vars being passed to views, failing on route.
+    laravel call to a member function on null (on submit)
+        . User is not logged in or registered.
+    . Class 'Parsedown' not found
+        . Composer require erusev/parsedown
+    . Smtp server? Mailtrap.io login using github acct
+    . Facade\Ignition\Exceptions\ViewException. Call to undefined function str_slug()
+        > composer require laravel/helpers > refresh
+        . Also 'class str not found' error
+            . Change str::slug() to str_slug()
+    . Using react? 
+        . Install laravel 
+            > composer require laravel/ui 
+            > php artisan preset react > npm install && npm run dev 
+            > php artisan migrate 
+            > on bladee file, add <script src='js/app.js'></script>
+    Illuminate\Database\QueryException
+    SQLSTATE[42703]: Undefined column: 7 ERROR: column "username" of relation "users" does not exist LINE 1: insert into "users" ("name", "email", "username", "password"... ^ (SQL: insert into "users" ("name", "email", "username", "password", "updated_at", "created_at") values (jim, jim@test.com, jimsyyap, $2y$10$EJIoD7zAG0vLn0sM.3rtqu3HsIl13HUutxAQqNo1mKIufDLkvNPy2, 2020-02-04 04:53:07, 2020-02-04 04:53:07) returning "id")
+        . Laravel is trying to insert data into users table, not bookmarks table?
+            . Bookmarks table has column username, users table has no column username
+                . Bookmarks table has column username, users table has no column username...what then?
+                    . Add column username to table:users
+                    . It worked.
+    . On php artisan migrate using pgsql --
+        . PDOException::("SQLSTATE[08006] [7] could not connect to server: Connection refused
+            Is the server running on host "127.0.0.1" and accepting
+            TCP/IP connections on port 3306?")
+                . Laravel settings not yet right for pgsql?
+                    . I forgot to set env port to 5432
+
+//----
+https://devmarketer.io/learn/deploy-laravel-5-app-lemp-stack-ubuntu-nginx/ 
+
+how to deploy laravel to production
+    . Sudo apt install php-xml
+    . Server setup?
+    . Cd /var
+    . Sudo mkdir repo && cd
+    . Mkdir domain.git
+    . Git init --bare
+    . Cd hooks
+    . Vim post-receive
+    . !#/bin/sh
+        git --work-tree=/var/www/domainfolder --git-dir=/var/repo/domain.git checkout -f
+    . Sudo chmod +x post-receive
+    . Go to local pc
+    . Cd to working folder
+    . Git status should be master branch clean
+    . git remote add production ssh://root@your_IP/var/repo/yourdomain.git 
+    . Git remote -v 
+    . Git push production master
+        . Do same to push changes from local to prod
+    . On server, create nginx/sites-available/yourdomain.conf
+    . Copy from other domain that works
+    . Sudo nginx -t
+    . Sudo systemctl restart nginx
+    . Database created? 
+    . Create env, update 
+    . Sudo Composer install --no-dev
+    . Sudo chown -R :www-data /path/to/folder
+    . Sudo chmod 775 storage
+    . Sudo chmod 775 bootstrap/cache
+    . Composer require laravel/ui
+    php artisan ui bootstrap --auth
+    php artisan key:generate
+    config/app.php > set url > timezone > locale
+    php artisan config:cache
+    php artisan migrate
+    npm install && npm run dev
+    joy?
+
+N+1 problem
+    If you don’t lazy load that, then Laravel will fetch each question as a single query with limit 1 and then each answer with a limit of 1 thus generating 5 queries per question instead of 1 query to fetch it all at once.
+    https://youtu.be/bZlvzvGpCEE
+
+Dev Requirements ---
+    (*focus on laravel, react, psql)
+    · Very strong Laravel and PHP skills with at least 4 years proven background in this field;
+    · Hands on experience in aws and Azure architectures;
+    · Great SQL and MYSQL knowledge;
+    · Familiar with Docker and Kubernetese
+    · Experience developing user management web services
+    · Understanding of security practices;
+    · CICD experience is highly regarded;
+    · Working knowledge of source control e.g. Bitbucket, Github;
+    · Ability to debug backend site issues using inspector tools;
+    · Experience with Test Driven Development, utilising unit testing and continuous integration and deployment
